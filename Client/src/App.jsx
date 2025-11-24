@@ -1,6 +1,6 @@
 // Learnova / Client / src / App.jsx
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useMatch } from "react-router-dom";
 import Home from "./pages/students/Home";
 import CoursesList from "./pages/students/CoursesList";
 import CourseDetails from "./pages/students/CourseDetails";
@@ -13,10 +13,16 @@ import Dashboard from "./pages/educator/Dashboard";
 import AddCourse from "./pages/educator/AddCourse";
 import MyCourses from "./pages/educator/MyCourses";
 import StudentsEnrolled from "./pages/educator/StudentsEnrolled";
+import Navbar from "./components/students/Navbar";
+import { ToastContainer, toast } from "react-toastify";
 
 const App = () => {
+  const isEducatorRoute = useMatch("/educator/*");
+
   return (
-    <div>
+    <div className="text-default min-h-screen bg-white">
+      <ToastContainer />
+      {!isEducatorRoute && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/course-list" element={<CoursesList />} />
