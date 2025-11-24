@@ -4,6 +4,7 @@ import Hero from "../../components/students/Hero";
 import Companies from "../../components/students/Companies";
 import CoursesSection from "../../components/students/CoursesSection";
 import TestimonialSection from "../../components/students/TestimonialSection";
+import CallToAction from "../../components/students/CallToAction";
 
 const Home = () => {
   return (
@@ -12,6 +13,7 @@ const Home = () => {
       <Companies />
       <CoursesSection />
       <TestimonialSection />
+      <CallToAction />
     </div>
   );
 };
