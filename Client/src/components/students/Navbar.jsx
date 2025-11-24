@@ -1,13 +1,24 @@
 // Learnova / Client / src / components / students / Navbar.jsx
-import React from "react";
+import React, { useContext } from "react";
 import { assets } from "../../assets/assets";
 import Button from "../Button";
 import { Link } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { BsPersonCircle } from "react-icons/bs";
+import { AppContext } from "../../context/AppContext";
 
 const Navbar = () => {
   const isCourseListPage = location.pathname.includes("course-list");
+
+  const {
+    navigate,
+    currency,
+    allCourses,
+    setAllCourses,
+    calculateRating,
+    isEducator,
+    setIsEducator,
+  } = useContext(AppContext);
 
   const { openSignIn } = useClerk();
   const { user } = useUser();
@@ -19,6 +30,7 @@ const Navbar = () => {
       }`}
     >
       <img
+        onClick={() => navigate("/")}
         src={assets.Logo_Dark}
         alt="Logo"
         className="w-28 lg:w-32 cursor-pointer"
@@ -28,9 +40,13 @@ const Navbar = () => {
         <div className="flex items-center gap-5">
           {user && (
             <>
-              {/* <button>Become Educator</button> */}
-              <Button className="px-0!">Become Educator</Button>|{" "}
-              <Link to={"/my-entrollments"}>My Enrollments</Link>
+              {/* <button onClick={() => navigate("/navigate")}>
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </button> */}
+              <Button onClick={() => navigate("/navigate")} className="px-0!">
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </Button>
+              | <Link to={"/my-entrollments"}>My Enrollments</Link>
             </>
           )}
         </div>
@@ -60,9 +76,11 @@ const Navbar = () => {
         <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
           {user && (
             <>
-              {/* <button>Become Educator</button> */}
-              <Button className="px-0!" variant={"text"}>
-                Become Educator
+              {/* <button onClick={() => navigate("/navigate")}>
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
+              </button> */}
+              <Button onClick={() => navigate("/navigate")} className="px-0!">
+                {isEducator ? "Educator Dashboard" : "Become Educator"}
               </Button>
               | <Link to={"/my-entrollments"}>My Enrollments</Link>
             </>
