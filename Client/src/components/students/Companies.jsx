@@ -16,7 +16,7 @@ const Companies = () => {
   ];
 
   return (
-    <div className="pt-16">
+    <div className="pt-16 bg-white">
       <p className="text-base text-gray-500">
         Join learners worldwide who trust us
       </p>
