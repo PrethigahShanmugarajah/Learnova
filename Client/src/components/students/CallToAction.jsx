@@ -6,7 +6,7 @@ import { FiArrowRight } from "react-icons/fi";
 
 const CallToAction = () => {
   return (
-    <div className="bg-slate-50 flex flex-col items-center gap-4 pt-10 pb-24 px-8 md:px-0 w-full">
+    <div className="bg-slate-50 flex flex-col items-center gap-4 pt-10 pb-24 px-8 md:px-0 w-full mt-10">
       <h1 className="text-xl md:text-4xl text-gray-800 font-semibold">
         Learn without limits—anytime, anywhere
       </h1>
