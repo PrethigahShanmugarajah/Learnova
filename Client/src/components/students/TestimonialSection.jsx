@@ -5,7 +5,7 @@ import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
 const TestimonialSection = () => {
   return (
-    <div className="pb-14 px-8 md:px-0 bg-white">
+    <div className="pb-14 px-8 md:px-0 bg-white mt-10">
       <h2 className="text-3xl font-medium text-gray-800">Testimonials</h2>
       <p className="md:text-base text-gray-500 mt-3">
         {/* Hear from our learners as they share their journeys of transformation,
