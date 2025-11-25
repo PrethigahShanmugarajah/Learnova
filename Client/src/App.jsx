@@ -6,8 +6,8 @@ import CoursesList from "./pages/students/CoursesList";
 import CourseDetails from "./pages/students/CourseDetails";
 import MyEnrollments from "./pages/students/MyEnrollments";
 import Player from "./pages/students/Player";
-// import Loading from "./components/Loading";
-import Loading from "./components/students/Loading";
+import Loading from "./components/Loading";
+// import Loading from "./components/students/Loading";
 import Educator from "./pages/educator/Educator";
 import Dashboard from "./pages/educator/Dashboard";
 import AddCourse from "./pages/educator/AddCourse";
@@ -15,6 +15,7 @@ import MyCourses from "./pages/educator/MyCourses";
 import StudentsEnrolled from "./pages/educator/StudentsEnrolled";
 import Navbar from "./components/students/Navbar";
 import { ToastContainer, toast } from "react-toastify";
+import "quill/dist/quill.snow.css";
 
 const App = () => {
   const isEducatorRoute = useMatch("/educator/*");
