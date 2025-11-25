@@ -2,6 +2,7 @@
 import express from "express";
 import {
   addCourse,
+  educatorDashboardData,
   getEducatorCourses,
   updateRoleEducator,
 } from "../controllers/educatorController.js";
@@ -18,5 +19,6 @@ educatorRouter.post(
   addCourse
 );
 educatorRouter.get("/courses", protectEducator, getEducatorCourses);
+educatorRouter.get("/dashboard", protectEducator, educatorDashboardData);
 
 export default educatorRouter;
