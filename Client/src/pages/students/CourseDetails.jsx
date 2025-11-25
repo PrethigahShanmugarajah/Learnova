@@ -2,7 +2,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
-import Loading from "../../components/students/Loading";
+// import Loading from "../../components/students/Loading";
+import Loading from "../../components/Loading";
 import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
