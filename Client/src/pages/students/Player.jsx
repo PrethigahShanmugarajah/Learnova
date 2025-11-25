@@ -6,7 +6,6 @@ import { FiChevronDown } from "react-icons/fi";
 import { HiOutlinePlay } from "react-icons/hi";
 import { assets } from "../../assets/assets";
 import { BsCheckCircleFill } from "react-icons/bs";
-import { HiOutlinePlay } from "react-icons/hi";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import Footer from "../../components/students/Footer";
