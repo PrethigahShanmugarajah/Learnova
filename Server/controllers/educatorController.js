@@ -11,7 +11,10 @@ export const updateRoleEducator = async (req, res) => {
         role: "educator",
       },
     });
-    res.json({ success: true, message: "You can publish a course now!" });
+
+    return res
+      .status(200)
+      .json({ success: true, message: "You can publish a course now!" });
   } catch (error) {
     console.error("Update Role to Educator Error:", error.message);
 
