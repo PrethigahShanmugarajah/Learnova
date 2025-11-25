@@ -59,3 +59,19 @@ export const addCourse = async (req, res) => {
     });
   }
 };
+
+/* -------- Get Educator Courses -------- */
+export const getEducatorCourses = async (req, res) => {
+  try {
+    const educator = req.auth.userId;
+    const courses = await Course.find({ educator });
+    return res.status(200).json({ success: true, courses });
+  } catch (error) {
+    console.error("Get Educator Courses Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: `Get Educator Courses Error: ${error.message}`,
+    });
+  }
+};
