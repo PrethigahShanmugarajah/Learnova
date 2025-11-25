@@ -5,6 +5,8 @@ import { useParams } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { HiOutlinePlay } from "react-icons/hi";
 import { assets } from "../../assets/assets";
+import { BsCheckCircleFill } from "react-icons/bs";
+import { HiOutlinePlay } from "react-icons/hi";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import Footer from "../../components/students/Footer";
@@ -98,15 +100,19 @@ const Player = () => {
                     <ul className="list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-200">
                       {chapter.chapterContent.map((lecture, i) => (
                         <li key={i} className="flex items-start gap-2 py-1">
-                          <img
+                          {/* <img
                             src={
                               false ? assets.blue_tick_icon : assets.play_icon
                             }
                             alt="Play_Icon"
                             className="w-4 h-4 mt-1"
-                          />
+                          /> */}
 
-                          {/* <HiOutlinePlay className="size-6" /> */}
+                          {false ? (
+                            <BsCheckCircleFill className="w-4 h-4 mt-1 text-blue-500" />
+                          ) : (
+                            <HiOutlinePlay className="w-4 h-4 mt-1" />
+                          )}
 
                           <div className="flex items-center justify-between w-full text-gray-800 text-xs md:text-default">
                             <p className="mt-1">{lecture.lectureTitle}</p>
