@@ -1,5 +1,7 @@
 // Learnova / Server / controllers / educatorController.js
 import { clerkClient } from "@clerk/express";
+import Course from "../models/Course.js";
+import { v2 as cloudinary } from "cloudinary";
 
 /* -------- Update Role to Educator -------- */
 export const updateRoleEducator = async (req, res) => {
@@ -21,6 +23,39 @@ export const updateRoleEducator = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: `Update Role to Educator Error: ${error.message}`,
+    });
+  }
+};
+
+/* -------- Add New Course -------- */
+export const addCourse = async (req, res) => {
+  try {
+    const { courseData } = req.body;
+    const imageFile = req.file;
+    const educatorId = req.auth.userId;
+
+    if (!imageFile) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Thumbnail Not Attached" });
+    }
+
+    const parsedCourseData = await JSON.parse(courseData);
+    parsedCourseData.educator = educatorId;
+    const newCourse = await Course.create(parsedCourseData);
+    const imageUpload = await cloudinary.uploader.upload(imageFile.path);
+    newCourse.courseThumbnail = imageUpload.secure_url;
+    await newCourse.save();
+
+    return res
+      .status(201)
+      .json({ success: true, message: "Course Added!", course: newCourse });
+  } catch (error) {
+    console.error("Add New Course Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: `Add New Course Error: ${error.message}`,
     });
   }
 };
