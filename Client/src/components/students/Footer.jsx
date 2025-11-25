@@ -11,10 +11,9 @@ const Footer = () => {
           <img src={assets.Logo_Light} alt="Logo" className="w-28 lg:w-32" />
 
           <p className="mt-6 text-center md:text-left text-sm text-white/80">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Pariatur
-            mollitia ut maiores vero sunt tenetur facilis veniam repellat hic
-            necessitatibus! Laborum, magnam voluptas recusandae repudiandae
-            nostrum culpa maxime dolorum sapiente!
+            Learnova is your trusted platform for online learning. Explore a
+            wide range of courses, connect with expert instructors, and enhance
+            your skills at your own pace.
           </p>
         </div>
 
@@ -45,8 +44,8 @@ const Footer = () => {
           </h2>
 
           <p className="text-sm text-white/80">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quia,
-            voluptate tempore.
+            Stay updated with the latest courses, tips, and exclusive offers
+            from Learnova.
           </p>
 
           <div className="flex items-center gap-2 pt-4">
@@ -56,9 +55,9 @@ const Footer = () => {
               className="border border-gray-200 bg-gray-800 text-gray-500 placeholder-gray-300 outline-none w-64 h-9 rounded px-2 text-sm"
             />
 
-            <button className="bg-blue-600 w-24 h-9 text-white rounded">
+            {/* <button className="bg-blue-600 w-24 h-9 text-white rounded">
               Subscribe
-            </button>
+            </button> */}
 
             <Button className="w-24 h-9 px-0! py-0!" variant={"primary"}>
               Subscribe
