@@ -9,7 +9,7 @@ import { clerkWebhooks } from "./controllers/webhooks.js";
 const app = express();
 
 /* -------- CONNECT TO DATABASE -------- */
-connectDB();
+await connectDB();
 
 /* -------- MIDDLEWARE CONFIGURATION -------- */
 app.use(cors());
