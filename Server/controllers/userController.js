@@ -98,11 +98,7 @@ export const purchaseCourse = async (req, res) => {
       cancel_url: `${origin.replace(/\/$/, "")}/`,
       line_items: line_items,
       mode: "payment",
-      // metadata: { purchaseId: newPurchase._id.toString() },
-      metadata: {
-        purchaseId: newPurchase._id.toString(),
-        session_id: session.id,
-      },
+      metadata: { purchaseId: newPurchase._id.toString() },
     });
 
     res.json({ success: true, session_url: session.url });
