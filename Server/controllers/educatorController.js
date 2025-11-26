@@ -115,7 +115,7 @@ export const educatorDashboardData = async (req, res) => {
         });
       });
     }
-    res.json({
+    return res.status(200).json({
       success: true,
       dashboardData: { totalEarnings, enrolledStudentsData, totalCourses },
     });
@@ -149,7 +149,7 @@ export const getEnrolledStudentsData = async (req, res) => {
       purchaseData: purchase.createdAt,
     }));
 
-    res.json({ success: true, enrolledStudents });
+    return res.status(201).json({ success: true, enrolledStudents });
   } catch (error) {
     console.error(
       "Get Enrolled Students Data with Purchase Data Error:",
