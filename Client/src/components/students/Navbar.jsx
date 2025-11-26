@@ -82,7 +82,7 @@ const Navbar = () => {
               <Button onClick={() => navigate("/navigate")} className="px-0!">
                 {isEducator ? "Educator Dashboard" : "Become Educator"}
               </Button>
-              | <Link to={"/my-entrollments"}>My Enrollments</Link>
+              | <Link to={"/my-enrollments"}>My Enrollments</Link>
             </>
           )}
         </div>
