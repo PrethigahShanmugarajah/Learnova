@@ -30,7 +30,9 @@ export const userEnrolledCourses = async (req, res) => {
     const userId = req.auth.userId;
     const userData = await User.findById(userId).populate("enrolledCourses");
 
-    res.json({ success: true, enrolledCourses: userData.enrolledCourses });
+    return res
+      .status(200)
+      .json({ success: true, enrolledCourses: userData.enrolledCourses });
   } catch (error) {
     console.error(
       "Users Enrolled Courses With Lecture Links Error:",
@@ -39,7 +41,7 @@ export const userEnrolledCourses = async (req, res) => {
 
     return res.status(500).json({
       success: false,
-      message: `Users Enrolled Courses With Lecture Links  Error: ${error.message}`,
+      message: `Users Enrolled Courses With Lecture Links Error: ${error.message}`,
     });
   }
 };
