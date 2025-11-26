@@ -79,7 +79,6 @@ export const purchaseCourse = async (req, res) => {
     const currency = process.env.CURRENCY.toLowerCase();
 
     // Creating line items to for Stripe
-
     const line_items = [
       {
         price_data: {
