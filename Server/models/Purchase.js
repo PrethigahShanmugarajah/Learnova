@@ -17,7 +17,7 @@ const purchaseSchema = mongoose.Schema(
     status: {
       type: String,
       enum: ["pending", "completed", "failed"],
-      defaul: "pending",
+      defaut: "pending",
     },
   },
   { timestamps: true }
