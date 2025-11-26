@@ -136,7 +136,9 @@ export const updateUserCourseProgress = async (req, res) => {
       });
     }
 
-    res.json({ success: true, message: "Progress Updated!" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Progress Updated!" });
   } catch (error) {
     console.error("Update User Course Progress Error:", error.message);
 
