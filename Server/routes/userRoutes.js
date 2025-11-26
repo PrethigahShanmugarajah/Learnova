@@ -1,6 +1,7 @@
 // Server / routes / userRoutes.js
 import express from "express";
 import {
+  getUserCourseProgress,
   getUserData,
   purchaseCourse,
   updateUserCourseProgress,
@@ -13,5 +14,6 @@ userRouter.get("/data", getUserData);
 userRouter.get("/enrolled-courses", userEnrolledCourses);
 userRouter.post("/purchase", purchaseCourse);
 userRouter.post("/update-course-progress", updateUserCourseProgress);
+userRouter.post("/get-course-progress", getUserCourseProgress);
 
 export default userRouter;
