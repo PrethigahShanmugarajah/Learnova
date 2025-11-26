@@ -148,3 +148,20 @@ export const updateUserCourseProgress = async (req, res) => {
     });
   }
 };
+
+/* -------- Get User Course Progress -------- */
+export const getUserCourseProgress = async (req, res) => {
+  try {
+    const userId = req.auth.userId;
+    const { courseId } = req.body;
+    const progressData = await CourseProgress.findOne({ userId, courseId });
+    return res.status(200).json({ success: true, progressData });
+  } catch (error) {
+    console.error("Get User Course Progress Error:", error.message);
+
+    return res.status(500).json({
+      success: false,
+      message: `Get User Course Progress Error: ${error.message}`,
+    });
+  }
+};
