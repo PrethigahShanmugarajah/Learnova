@@ -1,4 +1,3 @@
-// Learnova / Server / controllers / userController.js.js
 import Course from "../models/Course.js";
 import CourseProgress from "../models/CourseProgress.js";
 import Purchase from "../models/Purchase.js";
@@ -92,8 +91,6 @@ export const purchaseCourse = async (req, res) => {
     ];
 
     const session = await stripeInstance.checkout.sessions.create({
-      // success_url: `${origin}/loading/my-enrollments`,
-      // cancel_url: `${origin}/`,
       success_url: `${origin.replace(/\/$/, "")}/loading/my-enrollments`,
       cancel_url: `${origin.replace(/\/$/, "")}/`,
       line_items: line_items,
@@ -186,7 +183,7 @@ export const addUserRating = async (req, res) => {
 
     const user = await User.findById(userId);
 
-    if (!user || user.enrolledCourses.includes(courseId)) {
+    if (!user || !user.enrolledCourses.includes(courseId)) {
       return res.status(403).json({
         success: false,
         message: "User has not purchased this course.",
@@ -204,7 +201,9 @@ export const addUserRating = async (req, res) => {
     }
     await course.save();
 
-    return res.status(400).json({ success: false, message: "Invalid Details" });
+    return res
+      .status(200)
+      .json({ success: true, message: "Rating added", rating });
   } catch (error) {
     console.error("Add User Ratings to Course Error:", error.message);
 

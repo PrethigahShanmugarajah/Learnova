@@ -1,42 +1,18 @@
-// Learnova / Client / src / pages / students / CoursesList.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import SearchBar from "../../components/students/SearchBar";
 import { useParams } from "react-router-dom";
 import CourseCard from "../../components/students/CourseCard";
-import { assets } from "../../assets/assets";
 import { FiX } from "react-icons/fi";
 import Footer from "../../components/students/Footer";
 import Button from "../../components/Button";
 
 const CoursesList = () => {
-  const {
-    navigate,
-    currency,
-    allCourses,
-    setAllCourses,
-    calculateRating,
-    isEducator,
-    setIsEducator,
-  } = useContext(AppContext);
+  const { navigate, allCourses } = useContext(AppContext);
   const { input } = useParams();
-  console.log("useParams input:", input);
+  // console.log("useParams input:", input);
 
   const [filteredCourse, setFilteredCourse] = useState([]);
-
-  // useEffect(() => {
-  //   if (allCourses && allCourses.length > 0) {
-  //     const tempCourses = allCourses.slice();
-
-  //     input
-  //       ? setFilteredCourse(
-  //           tempCourses.filter((item) =>
-  //             item.courseTitle.toLowerCase().includes(input.toLowerCase())
-  //           )
-  //         )
-  //       : setFilteredCourse(tempCourses);
-  //   }
-  // }, [allCourses, input]);
 
   useEffect(() => {
     if (allCourses && allCourses.length > 0) {
@@ -73,35 +49,10 @@ const CoursesList = () => {
             </p>
           </div>
 
-          {/* <SearchBar data={input} /> */}
           <SearchBar key={input || "clear"} data={input || ""} />
         </div>
 
-        {/* {input && (
-          <div className="inline-flex items-center gap-4 px-4 py-2 border mt-8 -mb-8 text-gray-600">
-            <p>{input}</p>
-            <img
-              src={assets.cross_icon}
-              alt="Cross_Icon"
-              className="cursor-pointer"
-              onClick={() => navigate("/course-list")}
-            />
-          </div>
-        )} */}
-
         {input && (
-          // <div className="inline-flex items-center gap-4 px-4 py-2 border mt-8 -mb-8 text-gray-600">
-          //   <p>{input}</p>
-          //   <img
-          //     src={assets.cross_icon}
-          //     alt="Cross_Icon"
-          //     className="cursor-pointer"
-          //     onClick={() => {
-          //       navigate("/course-list", { replace: true });
-          //     }}
-          //   />
-          // </div>
-
           <Button
             variant="secondary"
             className="inline-flex items-center gap-2 mt-8 -mb-8 px-4 py-2 text-gray-600"

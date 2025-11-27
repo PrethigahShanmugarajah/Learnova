@@ -1,5 +1,3 @@
-// Learnova / Client / src / utils / date.js
-
 /* -------- DD/MM/YYYY -------- */
 export const formatDDMMYYYY = (date) => {
   const d = new Date(date);

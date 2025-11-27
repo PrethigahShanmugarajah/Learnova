@@ -1,19 +1,19 @@
-// Learnova / Client / src / pages / educator / StudentsEnrolled.jsx
-import React, { useEffect, useState } from "react";
-import { dummyStudentEnrolled } from "../../assets/assets";
+import React, { useContext, useEffect, useState } from "react";
 import Loading from "../../components/Loading";
 import { formatDDMMYYYYWithTimeAMPM } from "../../utils/date";
+import { AppContext } from "../../context/AppContext";
+import { fetchEnrolledStudents } from "../../services/fetch";
 
 const StudentsEnrolled = () => {
+  const { isEducator, getToken } = useContext(AppContext);
+
   const [enrolledStudents, setEnrolledStudents] = useState(null);
 
-  const fetchEnrolledStudents = async () => {
-    setEnrolledStudents(dummyStudentEnrolled);
-  };
-
   useEffect(() => {
-    fetchEnrolledStudents(dummyStudentEnrolled);
-  }, []);
+    if (isEducator) {
+      fetchEnrolledStudents(getToken, setEnrolledStudents);
+    }
+  }, [isEducator]);
 
   return enrolledStudents ? (
     <div className="min-h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0">
@@ -48,15 +48,14 @@ const StudentsEnrolled = () => {
                     alt={item.student.name}
                     className="w-9 h-9 rounded-full"
                   />
+                  <span className="font-truncate text-gray-600">
+                    {item.student.name}
+                  </span>
                 </td>
 
                 <td className="px-4 py-3 truncate">{item.courseTitle}</td>
 
                 <td className="px-4 py-3 hidden sm:table-cell">
-                  {/* {new Date(item.purchaseDate).toLocaleDateString()} */}
-
-                  {/* {formatDDMMYYYYWithTimeAMPM(item.purchaseDate)} */}
-
                   <div className="flex flex-col">
                     <span className="font-medium">
                       {

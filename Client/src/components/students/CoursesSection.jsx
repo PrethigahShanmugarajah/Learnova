@@ -1,16 +1,13 @@
-// Learnova / Client / src / components / students / CoursesSection.jsx
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
 import { AppContext } from "../../context/AppContext";
 import CourseCard from "./CourseCard";
 import Button from "../Button";
 
 const CoursesSection = () => {
-  const { navigate, currency, allCourses, setAllCourses } =
-    useContext(AppContext);
+  const { navigate, allCourses } = useContext(AppContext);
 
   return (
-    <div className="py-16 md:px-40 px-8 bg-slate-50 mt-10 w-full">
+    <div className="py-16 md:px-40 px-8 mt-10 w-full">
       <h2 className="text-3xl font-medium text-black">Learn from the best</h2>
       <p className="text-sm md:text-base text-gray-500 mt-3">
         Discover our top-rated courses across various categories. From coding
@@ -23,14 +20,6 @@ const CoursesSection = () => {
           <CourseCard key={index} course={course} />
         ))}
       </div>
-
-      {/* <Link
-        to={"/course-list"}
-        onClick={() => scrollTo(0, 0)}
-        className="text-gray-500 border border-gray-200 px-10 py-3 rounded"
-      >
-        Show all courses
-      </Link> */}
 
       <Button
         onClick={() => {

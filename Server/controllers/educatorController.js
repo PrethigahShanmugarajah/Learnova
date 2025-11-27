@@ -1,4 +1,3 @@
-// Learnova / Server / controllers / educatorController.js
 import { clerkClient } from "@clerk/express";
 import Course from "../models/Course.js";
 import { v2 as cloudinary } from "cloudinary";
@@ -32,6 +31,8 @@ export const updateRoleEducator = async (req, res) => {
 /* -------- Add New Course -------- */
 export const addCourse = async (req, res) => {
   try {
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file);
     const { courseData } = req.body;
     const imageFile = req.file;
     const educatorId = req.auth.userId;
@@ -42,7 +43,8 @@ export const addCourse = async (req, res) => {
         .json({ success: false, message: "Thumbnail Not Attached" });
     }
 
-    const parsedCourseData = await JSON.parse(courseData);
+    // const parsedCourseData = await JSON.parse(courseData);
+    const parsedCourseData = JSON.parse(courseData);
     parsedCourseData.educator = educatorId;
     const newCourse = await Course.create(parsedCourseData);
     const imageUpload = await cloudinary.uploader.upload(imageFile.path);
@@ -146,7 +148,7 @@ export const getEnrolledStudentsData = async (req, res) => {
     const enrolledStudents = purchases.map((purchase) => ({
       student: purchase.userId,
       courseTitle: purchase.courseId.courseTitle,
-      purchaseData: purchase.createdAt,
+      purchaseDate: purchase.createdAt,
     }));
 
     return res.status(201).json({ success: true, enrolledStudents });

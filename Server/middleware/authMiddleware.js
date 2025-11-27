@@ -1,4 +1,3 @@
-// Learnova / Server / middleware / authMiddleware.js
 import { clerkClient } from "@clerk/express";
 
 // Product Educator Routes

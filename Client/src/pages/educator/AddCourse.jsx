@@ -1,12 +1,15 @@
-// Learnova / Client / src / pages / educator / AddCourse.jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import uniqid from "uniqid";
 import Quill from "quill";
-import { assets } from "../../assets/assets";
 import { FiChevronDown, FiUpload, FiX } from "react-icons/fi";
 import Button from "../../components/Button";
+import { AppContext } from "../../context/AppContext";
+import { toast } from "react-toastify";
+import { addCourseRequest } from "../../services/request";
 
 const AddCourse = () => {
+  const { getToken } = useContext(AppContext);
+
   const quillRef = useRef(null);
   const editorRef = useRef(null);
 
@@ -26,6 +29,7 @@ const AddCourse = () => {
 
   const handleChapter = (action, chapterId) => {
     if (action === "add") {
+      // console.log("Add Chapter clicked");
       const title = prompt("Enter Chapter Name:");
       if (title) {
         const newChapter = {
@@ -70,10 +74,12 @@ const AddCourse = () => {
   };
 
   const addLecture = () => {
+    // console.log("addLecture clicked");
     setChapters(
       chapters.map((chapter) => {
         if (chapter.chapterId === currentChapterId) {
           const newLecture = {
+            lectureId: uniqid(),
             ...lectureDetails,
             lectureOrder:
               chapter.chapterContent.length > 0
@@ -89,13 +95,36 @@ const AddCourse = () => {
     setLectureDetails({
       lectureTitle: "",
       lectureDuration: "",
-      lecturelUrl: "",
+      lectureUrl: "",
       isPreviewFree: false,
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!image) return toast.error("Thumbnail not Selected");
+
+    const courseDataObj = {
+      courseTitle,
+      courseDescription: quillRef.current.root.innerHTML,
+      coursePrice: Number(coursePrice),
+      discount: Number(discount),
+      courseContent: chapters,
+      isPublished: true,
+    };
+
+    const token = await getToken();
+    const data = await addCourseRequest(courseDataObj, image, token);
+
+    if (data?.success) {
+      setCourseTitle("");
+      setCoursePrice(0);
+      setDiscount(0);
+      setImage(null);
+      setChapters([]);
+      quillRef.current.root.innerHTML = "";
+    }
   };
 
   useEffect(() => {
@@ -142,47 +171,6 @@ const AddCourse = () => {
 
           <div className="flex md:flex-row flex-col items-center gap-3">
             <p>Course Thumbnail</p>
-
-            {/* <label htmlFor="thumbnailImage" className="flex items-center gap-3">
-              <img
-                src={assets.file_upload_icon}
-                alt="File_Upload_Icon"
-                className="p-3 bg-green-500 rounded"
-              />
-
-              <input
-                type="file"
-                id="thumbnailImage"
-                onChange={(e) => setImage(e.target.files[0])}
-                accept="image/*"
-                hidden
-              />
-
-              <img src={image ? URL.createObjectURL(image) : ""} alt="" />
-            </label> */}
-
-            {/* <label
-              htmlFor="thumbnailImage"
-              className="flex items-center gap-3 cursor-pointer"
-            >
-              <FiUpload className="p-3 bg-green-500 text-white rounded size-10" />
-
-              <input
-                type="file"
-                id="thumbnailImage"
-                onChange={(e) => setImage(e.target.files[0])}
-                accept="image/*"
-                hidden
-              />
-
-              {image && (
-                <img
-                  src={URL.createObjectURL(image)}
-                  alt="Thumbnail Preview"
-                  className="object-cover rounded"
-                />
-              )}
-            </label> */}
 
             <label
               htmlFor="thumbnailImage"
@@ -232,16 +220,6 @@ const AddCourse = () => {
             >
               <div className="flex justify-between items-center p-4 border-b border-gray-200">
                 <div className="flex items-center">
-                  {/* <img
-                    onClick={() => handleChapter("toggle", chapter.chapterId)}
-                    src={assets.dropdown_icon}
-                    width={14}
-                    alt="Dropdown_Icon"
-                    className={`mr-2 cursor-pointer transition-all ${
-                      chapter.collapsed && "-rotate-90"
-                    }`}
-                  /> */}
-
                   <FiChevronDown
                     onClick={() => handleChapter("toggle", chapter.chapterId)}
                     className={`mr-2 cursor-pointer transition-transform ${
@@ -257,13 +235,6 @@ const AddCourse = () => {
                 <span className="text-gray-500">
                   {chapter.chapterContent.length} Lectures
                 </span>
-
-                {/* <img
-                  onClick={() => handleChapter("remove", chapter.chapterId)}
-                  src={assets.cross_icon}
-                  alt="Cross_Icon"
-                  className="cursor-pointer"
-                /> */}
 
                 <FiX
                   onClick={() => handleChapter("remove", chapter.chapterId)}
@@ -291,19 +262,6 @@ const AddCourse = () => {
                         - {lecture.isPreviewFree ? "Free Preview" : "Paid"}
                       </span>
 
-                      {/* <img
-                        src={assets.cross_icon}
-                        alt="Cross_Icon"
-                        className="cursor-pointer"
-                        onClick={() =>
-                          handleLecture(
-                            "remove",
-                            chapter.chapterId,
-                            lectureIndex
-                          )
-                        }
-                      /> */}
-
                       <FiX
                         onClick={() =>
                           handleLecture(
@@ -317,14 +275,8 @@ const AddCourse = () => {
                     </div>
                   ))}
 
-                  {/* <div
-                    className="inline-flex bg-gray-100 p-2 rounded cursor-pointer mt-2"
-                    onClick={() => handleLecture("add", chapter.chapterId)}
-                  >
-                    + Add Lecture
-                  </div> */}
-
                   <Button
+                    type="button"
                     onClick={() => handleLecture("add", chapter.chapterId)}
                     className="inline-flex bg-green-100!"
                     variant={"text"}
@@ -336,14 +288,8 @@ const AddCourse = () => {
             </div>
           ))}
 
-          {/* <div
-            className="flex justify-center items-center bg-green-100 p-2 rounded-lg cursor-pointer"
-            onClick={() => handleChapter("add")}
-          >
-            + Add Chapter
-          </div> */}
-
           <Button
+            type="button"
             className="flex justify-center items-center w-full bg-green-200!"
             onClick={() => handleChapter("add")}
             variant={"text"}
@@ -416,14 +362,6 @@ const AddCourse = () => {
                   />
                 </div>
 
-                {/* <button
-                  type="button"
-                  className="w-full bg-blue-400 text-white px-4 py-2 rounded"
-                  onClick={addLecture}
-                >
-                  Add
-                </button> */}
-
                 <Button
                   onClick={addLecture}
                   className="w-full"
@@ -433,13 +371,6 @@ const AddCourse = () => {
                   Add
                 </Button>
 
-                {/* <img
-                  onClick={() => setShowPopup(false)}
-                  src={assets.cross_icon}
-                  alt="Crosee_Icon"
-                  className="absolute top-4 right-4 w-4 cursor-pointer"
-                /> */}
-
                 <FiX
                   onClick={() => setShowPopup(false)}
                   className="absolute top-4 right-4 size-5 cursor-pointer text-black"
@@ -448,13 +379,6 @@ const AddCourse = () => {
             </div>
           )}
         </div>
-
-        {/* <button
-          type="submit"
-          className="bg-black text-white w-max py-2.5 px-8 rounded my-4"
-        >
-          Add
-        </button> */}
 
         <Button
           className="w-max py-2.5 px-16 my-4"

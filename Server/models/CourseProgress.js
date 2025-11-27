@@ -1,11 +1,10 @@
-// Learnova / Server / models / CourseProgress.js
 import mongoose from "mongoose";
 
 const courseProgressSchema = mongoose.Schema(
   {
     userId: { type: String, required: true },
     courseId: { type: String, required: true },
-    completed: { type: Boolean, required: true },
+    completed: { type: Boolean, required: false },
     lectureCompleted: [],
   },
   { minimize: false }

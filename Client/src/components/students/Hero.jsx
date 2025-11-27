@@ -1,6 +1,4 @@
-// Learnova / Client / src / components / students / Hero.jsx
 import React from "react";
-import { assets } from "../../assets/assets";
 import SearchBar from "./SearchBar";
 
 const Hero = () => {
@@ -9,11 +7,6 @@ const Hero = () => {
       <h1 className="home-heading-large md:home-heading-large relative font-bold text-gray-800 max-w-3xl mx-auto">
         Take control of your future with courses carefully{" "}
         <span className="text-green-600">tailored to your goals.</span>{" "}
-        {/* <img
-          src={assets.sketch}
-          alt="Sketch"
-          className="md:block hidden absolute -bottom-7 right-0"
-        /> */}
       </h1>
 
       <p className="md:block hidden text-gray-500 max-w-2xl mx-auto">

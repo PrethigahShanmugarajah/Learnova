@@ -1,12 +1,10 @@
-// Learnova / Client / src / components / educator / Navbar.jsx
 import React from "react";
-import { assets, dummyEducatorData } from "../../assets/assets";
+import { assets } from "../../assets/assets";
 import { UserButton, useUser } from "@clerk/clerk-react";
 import { Link } from "react-router-dom";
 import { BsPersonCircle } from "react-icons/bs";
 
 const Navbar = () => {
-  const educatorData = dummyEducatorData;
   const { user } = useUser();
 
   return (
@@ -21,7 +19,6 @@ const Navbar = () => {
         {user ? (
           <UserButton />
         ) : (
-          // <img className="max-w-8" src={assets.profile_img} />
           <BsPersonCircle className="max-w-8 size-8 text-green-800" />
         )}
       </div>

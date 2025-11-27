@@ -1,4 +1,3 @@
-// Server / routes / educatorRoutes.js
 import express from "express";
 import {
   addCourse,

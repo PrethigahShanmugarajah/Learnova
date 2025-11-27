@@ -1,4 +1,3 @@
-// Learnova / Client / src / components / students / Rating.jsx
 import React, { useEffect, useState } from "react";
 
 const Rating = ({ initialRating, onRate }) => {

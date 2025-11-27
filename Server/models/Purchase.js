@@ -1,4 +1,3 @@
-// Learnova / Server / models / Purchase.js
 import mongoose from "mongoose";
 
 const purchaseSchema = mongoose.Schema(

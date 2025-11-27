@@ -1,4 +1,3 @@
-// Learnova / Client / src / components / students / Navbar.jsx
 import React, { useContext } from "react";
 import { assets } from "../../assets/assets";
 import Button from "../Button";
@@ -6,19 +5,13 @@ import { Link } from "react-router-dom";
 import { useClerk, UserButton, useUser } from "@clerk/clerk-react";
 import { BsPersonCircle } from "react-icons/bs";
 import { AppContext } from "../../context/AppContext";
+import { becomeEducator } from "../../services/request";
 
 const Navbar = () => {
   const isCourseListPage = location.pathname.includes("course-list");
 
-  const {
-    navigate,
-    currency,
-    allCourses,
-    setAllCourses,
-    calculateRating,
-    isEducator,
-    setIsEducator,
-  } = useContext(AppContext);
+  const { navigate, isEducator, setIsEducator, getToken } =
+    useContext(AppContext);
 
   const { openSignIn } = useClerk();
   const { user } = useUser();
@@ -40,27 +33,18 @@ const Navbar = () => {
         <div className="flex items-center gap-5">
           {user && (
             <>
-              {/* <button onClick={() => navigate("/navigate")}>
-                {isEducator ? "Educator Dashboard" : "Become Educator"}
-              </button> */}
-              <Button onClick={() => navigate("/navigate")} className="px-0!">
+              <Button
+                onClick={() =>
+                  becomeEducator(getToken, setIsEducator, navigate)
+                }
+                className="px-0!"
+              >
                 {isEducator ? "Educator Dashboard" : "Become Educator"}
               </Button>
               | <Link to={"/my-enrollments"}>My Enrollments</Link>
             </>
           )}
         </div>
-
-        {/* {user ? (
-          <UserButton />
-        ) : (
-          <button
-            onClick={() => openSignIn()}
-            className="bg-blue-500 text-white px-5 py-2 rounded-full"
-          >
-            Create Account
-          </button>
-        )} */}
 
         {user ? (
           <UserButton />
@@ -76,10 +60,12 @@ const Navbar = () => {
         <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
           {user && (
             <>
-              {/* <button onClick={() => navigate("/navigate")}>
-                {isEducator ? "Educator Dashboard" : "Become Educator"}
-              </button> */}
-              <Button onClick={() => navigate("/navigate")} className="px-0!">
+              <Button
+                onClick={() =>
+                  becomeEducator(getToken, setIsEducator, navigate)
+                }
+                className="px-0!"
+              >
                 {isEducator ? "Educator Dashboard" : "Become Educator"}
               </Button>
               | <Link to={"/my-enrollments"}>My Enrollments</Link>
@@ -90,12 +76,7 @@ const Navbar = () => {
         {user ? (
           <UserButton />
         ) : (
-          // <button onClick={() => openSignIn()}>
-          //   <img src={assets.user_icon} alt="User_Icon" />
-          // </button>
-
           <Button onClick={() => openSignIn()} variant={"text"}>
-            {/* <img src={assets.user_icon} alt="User_Icon" /> */}
             <BsPersonCircle className="size-7.5 text-green-800" />
           </Button>
         )}

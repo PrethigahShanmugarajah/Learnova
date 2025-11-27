@@ -1,55 +1,85 @@
-// Learnova / Client / src / pages / students / Player.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
 import { FiChevronDown } from "react-icons/fi";
 import { HiOutlinePlay } from "react-icons/hi";
-import { assets } from "../../assets/assets";
 import { BsCheckCircleFill } from "react-icons/bs";
 import humanizeDuration from "humanize-duration";
 import YouTube from "react-youtube";
 import Footer from "../../components/students/Footer";
 import Rating from "../../components/students/Rating";
+import Loading from "../../components/Loading";
+import {
+  addCourseRating,
+  fetchCourseProgress,
+  markLectureAsCompleted,
+} from "../../services/request";
+import { fetchUserEnrolledCourses } from "../../services/fetch";
 
 const Player = () => {
   const {
-    navigate,
-    currency,
-    allCourses,
-    setAllCourses,
-    calculateRating,
-    isEducator,
-    setIsEducator,
     calculateChapterTime,
-    calculateCourseDuration,
-    calculateNoOfLectures,
     enrolledCourses,
     setEnrolledCourses,
-    fetchUserEnrolledCourses,
+    userData,
+    getToken,
   } = useContext(AppContext);
 
   const { courseId } = useParams();
   const [courseData, setCourseData] = useState(null);
   const [openSections, setOpenSections] = useState({});
   const [playerData, setPlayerData] = useState(null);
+  const [progressData, setProgressData] = useState(null);
+  const [initialRating, setInitialRating] = useState(0);
 
   const getCourseData = () => {
     enrolledCourses.map((course) => {
       if (course._id === courseId) {
         setCourseData(course);
+        course.courseRatings.map((item) => {
+          if (item.userId === userData._id) {
+            setInitialRating(item.rating);
+          }
+        });
       }
     });
   };
-
-  useEffect(() => {
-    getCourseData();
-  }, [enrolledCourses]);
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }));
   };
 
-  return (
+  useEffect(() => {
+    if (enrolledCourses.length > 0) {
+      getCourseData();
+    }
+  }, [enrolledCourses]);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      if (courseData) {
+        const token = await getToken();
+        const progress = await fetchCourseProgress(courseId, token);
+        setProgressData(progress);
+      }
+    };
+    fetchProgress();
+  }, [courseData]);
+
+  const handleCompleteLecture = async (lectureId) => {
+    const token = await getToken();
+    await markLectureAsCompleted(courseId, lectureId, token);
+    const progress = await fetchCourseProgress(courseId, token);
+    setProgressData(progress);
+  };
+
+  const handleRateCourse = async (rating) => {
+    const token = await getToken();
+    await addCourseRating(courseId, rating, token);
+    fetchUserEnrolledCourses(setEnrolledCourses, getToken);
+  };
+
+  return courseData ? (
     <>
       <div className="p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 md:px-36">
         {/* -------- LEFT COLUMN -------- */}
@@ -68,13 +98,6 @@ const Player = () => {
                     onClick={() => toggleSection(index)}
                   >
                     <div className="flex items-center gap-2">
-                      {/* <img
-                        src={assets.down_arrow_icon}
-                        alt="Down_Arrow_Icon"
-                        className={`transform transition-transform ${
-                          openSections[index] ? "rotate-180" : ""
-                        }`}
-                      /> */}
                       <FiChevronDown
                         className={`w-4 h-4 transform transition-transform ${
                           openSections[index] ? "rotate-180" : ""
@@ -99,16 +122,10 @@ const Player = () => {
                     <ul className="list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-200">
                       {chapter.chapterContent.map((lecture, i) => (
                         <li key={i} className="flex items-start gap-2 py-1">
-                          {/* <img
-                            src={
-                              false ? assets.blue_tick_icon : assets.play_icon
-                            }
-                            alt="Play_Icon"
-                            className="w-4 h-4 mt-1"
-                          /> */}
-
-                          {false ? (
-                            <BsCheckCircleFill className="w-4 h-4 mt-1 text-blue-500" />
+                          {progressData?.lectureCompleted?.includes(
+                            lecture?.lectureId
+                          ) ? (
+                            <BsCheckCircleFill className="w-4 h-4 mt-1 text-green-500" />
                           ) : (
                             <HiOutlinePlay className="w-4 h-4 mt-1" />
                           )}
@@ -121,6 +138,7 @@ const Player = () => {
                                   onClick={() =>
                                     setPlayerData({
                                       ...lecture,
+                                      lectureId: lecture.lectureId,
                                       chapter: index + 1,
                                       lecture: i + 1,
                                     })
@@ -148,7 +166,7 @@ const Player = () => {
 
           <div className="flex items-center gap-2 py-3 mt-10">
             <h1 className="text-xl font-bold">Rate this Course:</h1>
-            <Rating initialRating={0} />
+            <Rating initialRating={initialRating} onRate={handleRateCourse} />
           </div>
         </div>
 
@@ -167,8 +185,14 @@ const Player = () => {
                   {playerData.lectureTitle}
                 </p>
 
-                <button className="text-green-600">
-                  {false ? "Completed" : "Mark Complete"}
+                <button
+                  onClick={() => handleCompleteLecture(playerData.lectureId)}
+                  className="text-green-600 cursor-pointer"
+                >
+                  {progressData &&
+                  progressData.lectureCompleted.includes(playerData.lectureId)
+                    ? "Completed"
+                    : "Mark Complete"}
                 </button>
               </div>
             </div>
@@ -179,6 +203,8 @@ const Player = () => {
       </div>
       <Footer />
     </>
+  ) : (
+    <Loading />
   );
 };
 

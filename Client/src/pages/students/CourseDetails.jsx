@@ -1,10 +1,7 @@
-// Learnova / Client / src / pages / students / CourseDetails.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import { useParams } from "react-router-dom";
-// import Loading from "../../components/students/Loading";
 import Loading from "../../components/Loading";
-import { assets } from "../../assets/assets";
 import humanizeDuration from "humanize-duration";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 import { HiOutlinePlay } from "react-icons/hi";
@@ -14,19 +11,18 @@ import { LuBookOpen } from "react-icons/lu";
 import Button from "../../components/Button";
 import Footer from "../../components/students/Footer";
 import YouTube from "react-youtube";
+import { fetchCourseData } from "../../services/fetch";
+import { enrollCourse } from "../../services/request";
 
 const CourseDetails = () => {
   const {
-    navigate,
     currency,
-    allCourses,
-    setAllCourses,
     calculateRating,
-    isEducator,
-    setIsEducator,
     calculateChapterTime,
     calculateCourseDuration,
     calculateNoOfLectures,
+    userData,
+    getToken,
   } = useContext(AppContext);
   const { id } = useParams();
 
@@ -35,14 +31,15 @@ const CourseDetails = () => {
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false);
   const [playerData, setPlayerData] = useState(null);
 
-  const fetchCourseData = async () => {
-    const findCourse = allCourses.find((course) => course._id === id);
-    setCourseData(findCourse);
-  };
+  useEffect(() => {
+    if (id) fetchCourseData(id, setCourseData);
+  }, [id]);
 
   useEffect(() => {
-    fetchCourseData();
-  }, [allCourses]);
+    if (userData && courseData) {
+      setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id));
+    }
+  }, [userData, courseData]);
 
   const toggleSection = (index) => {
     setOpenSections((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -68,19 +65,6 @@ const CourseDetails = () => {
           <div className="flex items-center space-x-2 pt-3 pb-1 text-sm">
             <p>{calculateRating(courseData)}</p>
             <div className="flex">
-              {/* {[...Array(5)].map((_, i) => (
-                <img
-                  key={i}
-                  src={
-                    i < Math.floor(calculateRating(course))
-                      ? assets.star
-                      : assets.star_blank
-                  }
-                  alt="Star"
-                  className="w-3.5 h-3.5"
-                />
-              ))} */}
-
               {[...Array(5)].map((_, i) => {
                 const rating = Math.floor(calculateRating(courseData));
                 return i < rating ? (
@@ -106,11 +90,9 @@ const CourseDetails = () => {
           </div>
 
           <p className="text-sm">
-            {" "}
-            Course by{" "}
+            Course by
             <span className="text-green-600 underline">
-              {/* {course.educator.name} */}
-              Sathya
+              {courseData.educator.name}
             </span>
           </p>
 
@@ -128,13 +110,6 @@ const CourseDetails = () => {
                     onClick={() => toggleSection(index)}
                   >
                     <div className="flex items-center gap-2">
-                      {/* <img
-                        src={assets.down_arrow_icon}
-                        alt="Down_Arrow_Icon"
-                        className={`transform transition-transform ${
-                          openSections[index] ? "rotate-180" : ""
-                        }`}
-                      /> */}
                       <FiChevronDown
                         className={`w-4 h-4 transform transition-transform ${
                           openSections[index] ? "rotate-180" : ""
@@ -159,12 +134,6 @@ const CourseDetails = () => {
                     <ul className="list-disc md:pl-10 pl-4 pr-4 py-2 text-gray-600 border-t border-gray-200">
                       {chapter.chapterContent.map((lecture, i) => (
                         <li key={i} className="flex items-start gap-2 py-1">
-                          {/* <img
-                            src={assets.play_icon}
-                            alt="Play_Icon"
-                            className="w-4 h-4 mt-1"
-                          /> */}
-
                           <HiOutlinePlay className="size-6" />
 
                           <div className="flex items-center justify-between w-full text-gray-800 text-xs md:text-default">
@@ -229,11 +198,6 @@ const CourseDetails = () => {
 
           <div className="p-5">
             <div className="flex items-center gap-2">
-              {/* <img
-                src={assets.time_left_clock_icon}
-                alt="Time_Left_Clock_Icon"
-                className="w-3.5"
-              /> */}
               <BsStopwatch className="size-3.5 text-red-500" />
 
               <p className="text-red-500">
@@ -261,7 +225,6 @@ const CourseDetails = () => {
 
             <div className="flex items-center text-sm md:text-default gap-4 pt-2 md:pt-4 text-gray-500">
               <div className="flex items-center gap-1">
-                {/* <img src={assets.star} alt="Star" /> */}
                 <AiFillStar className="text-yellow-500 w-4 h-4" />
                 <p>{calculateRating(courseData)}</p>
               </div>
@@ -269,7 +232,6 @@ const CourseDetails = () => {
               <div className="h-4 w-px bg-gray-500/40"></div>
 
               <div className="flex items-center gap-1">
-                {/* <img src={assets.time_clock_icon} alt="Time_Clock_Icon" /> */}
                 <FiClock className="w-4 h-4" />
                 <p>{calculateCourseDuration(courseData)}</p>
               </div>
@@ -277,17 +239,19 @@ const CourseDetails = () => {
               <div className="h-4 w-px bg-gray-500/40"></div>
 
               <div className="flex items-center gap-1">
-                {/* <img src={assets.lesson_icon} alt="Lesson_Icon" /> */}
                 <LuBookOpen className="size-4" />
                 <p>{calculateNoOfLectures(courseData)} Lessons</p>
               </div>
             </div>
 
-            {/* <button className="md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium">
-              {isAlreadyEnrolled ? "Already Enrolled" : "Enroll Now"}
-            </button> */}
-
-            <Button className="md:mt-6 mt-4 w-full py-3" variant={"primary"}>
+            <Button
+              onClick={async () => {
+                const token = await getToken();
+                enrollCourse(courseData._id, token);
+              }}
+              className="md:mt-6 mt-4 w-full py-3"
+              variant={"primary"}
+            >
               {isAlreadyEnrolled ? "Already Enrolled" : "Enroll Now"}
             </Button>
 

@@ -1,35 +1,25 @@
-// Learnova / Client / src / pages / educator / MyCourses.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../context/AppContext";
 import Loading from "../../components/Loading";
 import { formatDDMMYYYYWithTimeAMPM } from "../../utils/date";
+import { fetchEducatorCourses } from "../../services/fetch";
 
 const MyCourses = () => {
-  const {
-    navigate,
-    currency,
-    allCourses,
-    setAllCourses,
-    calculateRating,
-    isEducator,
-    setIsEducator,
-    calculateChapterTime,
-    calculateCourseDuration,
-    calculateNoOfLectures,
-    enrolledCourses,
-    setEnrolledCourses,
-    fetchUserEnrolledCourses,
-  } = useContext(AppContext);
+  const { currency, isEducator, getToken } = useContext(AppContext);
 
   const [courses, setCourses] = useState(null);
 
-  const fetchEducatorCourses = async () => {
-    setCourses(allCourses);
-  };
-
   useEffect(() => {
-    fetchEducatorCourses();
-  }, []);
+    const getCourses = async () => {
+      if (isEducator) {
+        const token = await getToken();
+        const data = await fetchEducatorCourses(token);
+        data?.success && setCourses(data.courses);
+      }
+    };
+
+    getCourses();
+  }, [isEducator]);
 
   return courses ? (
     <div className="h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0">
@@ -83,10 +73,6 @@ const MyCourses = () => {
                   </td>
 
                   <td className="px-4 py-3">
-                    {/* {new Date(course.createdAt).toLocaleDateString()} */}
-
-                    {/* {formatDDMMYYYYWithTimeAMPM(course.createdAt)} */}
-
                     <div className="flex flex-col">
                       <span className="font-medium">
                         {

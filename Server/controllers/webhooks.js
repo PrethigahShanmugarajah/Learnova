@@ -1,4 +1,3 @@
-// Learnova / Server / controllers / webhooks.js
 import Stripe from "stripe";
 import User from "../models/User.js";
 import { Webhook } from "svix";
@@ -26,7 +25,6 @@ export const clerkWebhooks = async (req, res) => {
           imageUrl: data.image_url,
         };
         await User.create(userData);
-        // res.json({});
         res
           .status(201)
           .json({ success: true, message: "User created successfully!" });
@@ -40,7 +38,6 @@ export const clerkWebhooks = async (req, res) => {
           imageUrl: data.image_url,
         };
         await User.findByIdAndUpdate(data.id, userData);
-        // res.json({});
         res
           .status(200)
           .json({ success: true, message: "User updated successfully!" });
@@ -49,7 +46,6 @@ export const clerkWebhooks = async (req, res) => {
 
       case "user.deleted": {
         await User.findByIdAndDelete(data.id);
-        // res.json({});
         res.status(200).json({
           success: true,
           message: "User deleted successfully!",
@@ -78,7 +74,6 @@ export const stripeWebhooks = async (request, response) => {
   let event;
 
   try {
-    // event = Stripe.Webhooks.constructEvent(
     event = stripeInstance.webhooks.constructEvent(
       request.body,
       sig,

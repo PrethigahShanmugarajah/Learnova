@@ -1,4 +1,3 @@
-// Learnova / Server / controllers / courseController.js.js
 import Course from "../models/Course.js";
 
 /* -------- Get All Courses -------- */
